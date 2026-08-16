@@ -22,19 +22,29 @@
     --font-body: 'Inter', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
   }
+  :root[data-theme="light"]{
+    --bg: #F6F7F9;
+    --bg-alt: #FFFFFF;
+    --card: #FFFFFF;
+    --card-hover: #F0F2F5;
+    --border: #E1E4E9;
+    --text: #14181D;
+    --text-muted: #55606B;
+    --text-faint: #8A94A0;
+    --teal: #178F82;
+    --gold: #A8710F;
+  }
+  html{ transition:background-color .2s ease; scroll-behavior:smooth; }
   *{ margin:0; padding:0; box-sizing:border-box; }
-  html{ scroll-behavior:smooth; }
   body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:var(--font-body);
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
+    background:var(--bg); color:var(--text); font-family:var(--font-body);
+    line-height:1.6; -webkit-font-smoothing:antialiased;
+    transition:background-color .2s ease, color .2s ease;
   }
   a{ color:inherit; text-decoration:none; }
   .wrap{ max-width:1080px; margin:0 auto; padding:0 32px; }
   section{ padding:110px 0; }
-  @media(max-width:640px){ section{ padding:72px 0; } .wrap{ padding:0 20px; } }
+  @media(max-width:640px){ section{ padding:64px 0; } .wrap{ padding:0 20px; } }
 
   .grid-bg{
     position:fixed; inset:0; z-index:0; pointer-events:none;
@@ -46,44 +56,57 @@
   }
 
   header{
-    position:sticky; top:0; z-index:50;
-    background:rgba(16,20,26,0.85);
-    backdrop-filter:blur(10px);
-    border-bottom:1px solid var(--border);
+    position:sticky; top:0; z-index:50; background:rgba(16,20,26,0.85);
+    backdrop-filter:blur(10px); border-bottom:1px solid var(--border);
   }
-  nav.wrap{ display:flex; align-items:center; justify-content:space-between; padding-top:20px; padding-bottom:20px; }
+  :root[data-theme="light"] header{ background:rgba(246,247,249,0.85); }
+  nav.wrap{ display:flex; align-items:center; justify-content:space-between; padding-top:18px; padding-bottom:18px; gap:20px; }
   .logo{ font-family:var(--font-display); font-weight:700; font-size:17px; letter-spacing:0.02em; }
   .logo span{ color:var(--teal); }
-  .nav-links{ display:flex; gap:32px; font-size:14px; color:var(--text-muted); }
+  .nav-links{ display:flex; gap:28px; font-size:13.5px; color:var(--text-muted); flex:1; justify-content:center; }
+  .nav-links a{ position:relative; padding-bottom:2px; transition:color .15s ease; white-space:nowrap; }
   .nav-links a:hover{ color:var(--teal); }
-  @media(max-width:760px){ .nav-links{ display:none; } }
+  .nav-links a.active{ color:var(--teal); }
+  .nav-links a.active::after{ content:''; position:absolute; left:0; right:0; bottom:-6px; height:2px; background:var(--teal); border-radius:2px; }
+  @media(max-width:860px){ .nav-links{ display:none; } }
 
-  .hero{ position:relative; z-index:1; padding-top:100px; padding-bottom:70px; }
+  .theme-toggle{
+    display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px;
+    border-radius:8px; border:1px solid var(--border); background:var(--card); cursor:pointer;
+    transition:all .15s ease; flex-shrink:0;
+  }
+  .theme-toggle:hover{ border-color:var(--teal); }
+  .theme-toggle svg{ width:16px; height:16px; stroke:var(--text-muted); }
+  .theme-toggle:hover svg{ stroke:var(--teal); }
+  .theme-toggle .icon-sun{ display:none; }
+  :root[data-theme="light"] .theme-toggle .icon-moon{ display:none; }
+  :root[data-theme="light"] .theme-toggle .icon-sun{ display:block; }
+
+  .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.in-view{ opacity:1; transform:translateY(0); }
+
+  .hero{ position:relative; z-index:1; padding-top:90px; padding-bottom:60px; }
   .eyebrow{
-    font-family:var(--font-mono); font-size:12.5px; color:var(--teal);
-    letter-spacing:0.12em; text-transform:uppercase; margin-bottom:22px;
-    display:flex; align-items:center; gap:10px;
+    font-family:var(--font-mono); font-size:12.5px; color:var(--teal); letter-spacing:0.12em;
+    text-transform:uppercase; margin-bottom:22px; display:flex; align-items:center; gap:10px;
   }
   .eyebrow::before{ content:''; width:22px; height:1px; background:var(--teal); }
   h1{
-    font-family:var(--font-display); font-weight:700;
-    font-size:clamp(32px, 5vw, 50px); line-height:1.16; letter-spacing:-0.015em;
-    max-width:820px;
+    font-family:var(--font-display); font-weight:700; font-size:clamp(30px, 5vw, 48px);
+    line-height:1.18; letter-spacing:-0.015em; max-width:820px;
   }
-  h1 .hl{ color:var(--teal); }
-  .role-line{
-    font-family:var(--font-mono); font-size:15px; color:var(--text-muted);
-    margin-top:24px; letter-spacing:0.01em;
+  h1 .hl{
+    background:linear-gradient(100deg, var(--teal), var(--gold));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
   }
+  .role-line{ font-family:var(--font-mono); font-size:15px; color:var(--text-muted); margin-top:24px; }
   .role-line b{ color:var(--gold); font-weight:500; }
-  .summary{
-    max-width:660px; margin-top:20px; color:var(--text-muted); font-size:16px;
-  }
+  .summary{ max-width:660px; margin-top:20px; color:var(--text-muted); font-size:16px; }
+  .summary em{ color:var(--text); font-style:normal; border-bottom:1px dashed var(--teal); }
   .cta-row{ display:flex; gap:14px; margin-top:36px; flex-wrap:wrap; }
   .btn{
-    font-family:var(--font-body); font-weight:600; font-size:14px;
-    padding:13px 24px; border-radius:6px; display:inline-flex; align-items:center; gap:8px;
-    transition:all .15s ease; border:1px solid transparent;
+    font-family:var(--font-body); font-weight:600; font-size:14px; padding:13px 24px; border-radius:6px;
+    display:inline-flex; align-items:center; gap:8px; transition:all .15s ease; border:1px solid transparent;
   }
   .btn-primary{ background:var(--teal); color:#0A0D10; }
   .btn-primary:hover{ background:#63e0d4; }
@@ -92,11 +115,11 @@
 
   .kpi-strip{ position:relative; z-index:1; padding:0 0 90px 0; }
   .kpi-grid{
-    display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
-    background:var(--border); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+    display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border);
+    border:1px solid var(--border); border-radius:10px; overflow:hidden;
   }
   @media(max-width:820px){ .kpi-grid{ grid-template-columns:repeat(2,1fr); } }
-  .kpi{ background:var(--card); padding:26px 22px; position:relative; }
+  .kpi{ background:var(--card); padding:26px 22px; }
   .kpi-label{ font-size:12px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:14px; }
   .kpi-value{ font-family:var(--font-mono); font-size:26px; font-weight:700; color:var(--text); }
   .kpi-value .unit{ font-size:14px; color:var(--teal); }
@@ -104,7 +127,7 @@
   .spark i{ display:block; width:5px; background:var(--teal); opacity:0.55; border-radius:1px; }
   .kpi:nth-child(2) .spark i, .kpi:nth-child(4) .spark i{ background:var(--gold); }
 
-  .sec-head{ display:flex; align-items:baseline; gap:14px; margin-bottom:40px; position:relative; z-index:1; }
+  .sec-head{ display:flex; align-items:baseline; gap:14px; margin-bottom:44px; position:relative; z-index:1; }
   .sec-num{ font-family:var(--font-mono); color:var(--text-faint); font-size:13px; }
   .sec-title{ font-family:var(--font-display); font-size:26px; font-weight:600; }
   .sec-title .hl{ color:var(--teal); }
@@ -115,35 +138,88 @@
   .interest-tags{ display:flex; flex-wrap:wrap; gap:10px; margin-top:28px; }
   .interest-tag{
     font-family:var(--font-mono); font-size:12.5px; padding:8px 14px; border-radius:6px;
-    background:var(--card); border:1px solid var(--border); color:var(--teal);
+    background:var(--card); border:1px solid var(--border); color:var(--teal); transition:all .2s ease;
   }
+  .interest-tag:hover{ border-color:var(--teal); box-shadow:0 0 18px rgba(79,209,197,0.35); transform:translateY(-1px); }
 
-  #education{ position:relative; z-index:1; border-top:1px solid var(--border); }
-  .edu-grid{ display:flex; flex-direction:column; gap:28px; }
-  .edu-item{ padding:22px 24px; background:var(--card); border:1px solid var(--border); border-radius:8px; }
-  .edu-degree{ font-family:var(--font-display); font-size:18px; font-weight:600; margin-bottom:6px; }
-  .edu-school{ color:var(--teal); font-size:14px; margin-bottom:8px; font-weight:500; }
-  .edu-meta{ color:var(--text-muted); font-size:13.5px; }
-  .edu-tag{ display:inline-block; margin-top:12px; font-family:var(--font-mono); font-size:11.5px; color:var(--gold); background:rgba(232,176,75,0.1); padding:5px 10px; border-radius:4px; letter-spacing:0.04em; text-transform:uppercase; }
-
-  #experience{ position:relative; z-index:1; border-top:1px solid var(--border); }
-  .timeline{ position:relative; padding-left:28px; }
-  .timeline::before{ content:''; position:absolute; left:5px; top:6px; bottom:6px; width:1px; background:var(--border); }
-  .job{ position:relative; margin-bottom:52px; }
-  .job:last-child{ margin-bottom:0; }
-  .job::before{
-    content:''; position:absolute; left:-28px; top:5px; width:11px; height:11px;
-    border-radius:50%; background:var(--bg); border:2px solid var(--teal);
+  /* JOURNEY */
+  #journey{ position:relative; z-index:1; border-top:1px solid var(--border); }
+  .journey-lead{ max-width:680px; color:var(--text-muted); font-size:15.5px; margin-bottom:64px; }
+  .journey-stop{
+    display:flex; align-items:center; gap:56px; margin-bottom:100px; position:relative;
   }
-  .job-head{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px 20px; margin-bottom:6px; }
-  .job-role{ font-family:var(--font-display); font-size:19px; font-weight:600; }
-  .job-dates{ font-family:var(--font-mono); font-size:12.5px; color:var(--gold); white-space:nowrap; }
-  .job-org{ color:var(--teal); font-size:14px; margin-bottom:16px; font-weight:500; }
-  .job ul{ list-style:none; display:flex; flex-direction:column; gap:9px; }
-  .job li{ color:var(--text-muted); font-size:14.5px; padding-left:18px; position:relative; }
-  .job li::before{ content:'—'; position:absolute; left:0; color:var(--text-faint); }
-  .job-link{ font-family:var(--font-mono); font-size:12.5px; color:var(--teal); margin-top:10px; display:inline-block; }
-  .job-link:hover{ text-decoration:underline; }
+  .journey-stop:last-child{ margin-bottom:0; }
+  .journey-stop.rev{ flex-direction:row-reverse; }
+  @media(max-width:820px){
+    .journey-stop, .journey-stop.rev{ flex-direction:column; gap:28px; text-align:left; }
+  }
+  .journey-visual{ flex:0 0 300px; position:relative; }
+  @media(max-width:820px){ .journey-visual{ flex:0 0 auto; width:220px; } }
+  .journey-photo-wrap{ position:relative; }
+  .journey-photo{
+    width:100%; display:block; border-radius:10px; border:6px solid var(--card);
+    box-shadow:0 24px 48px rgba(0,0,0,0.45); transform:rotate(-3deg); transition:transform .3s ease;
+  }
+  .journey-stop.rev .journey-photo{ transform:rotate(3deg); }
+  .journey-photo-wrap:hover .journey-photo{ transform:rotate(0deg) scale(1.02); }
+  .journey-photo-2{
+    position:absolute; width:58%; bottom:-22px; right:-26px; border-radius:8px; border:5px solid var(--card);
+    box-shadow:0 18px 36px rgba(0,0,0,0.5); transform:rotate(6deg); transition:transform .3s ease;
+  }
+  .journey-stop.rev .journey-photo-2{ right:auto; left:-26px; transform:rotate(-6deg); }
+  .journey-photo-wrap:hover .journey-photo-2{ transform:rotate(0deg) scale(1.04); }
+
+  .journey-visual-card{
+    aspect-ratio:3/4; border-radius:10px; border:1px solid var(--border); background:var(--card);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+    transform:rotate(-3deg); box-shadow:0 24px 48px rgba(0,0,0,0.35); text-align:center; padding:14px;
+    transition:transform .2s ease; will-change:transform; cursor:pointer;
+  }
+  .journey-stop.rev .journey-visual-card{ transform:rotate(3deg); }
+  .journey-visual-card .illo{ width:100%; max-width:180px; margin-bottom:6px; }
+  .pulse-node{ animation:pulseNode 2.2s ease-in-out infinite; transform-origin:center; transform-box:fill-box; }
+  @keyframes pulseNode{ 0%,100%{ opacity:1; transform:scale(1); } 50%{ opacity:0.55; transform:scale(1.35); } }
+  .journey-visual-stat{ font-family:var(--font-mono); font-size:22px; font-weight:700; color:var(--text); }
+  .journey-visual-label{ font-family:var(--font-mono); font-size:11px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.08em; }
+
+  .journey-photo-wrap{ cursor:zoom-in; }
+  .lightbox{
+    position:fixed; inset:0; z-index:200; background:rgba(6,8,10,0.92); display:none;
+    align-items:center; justify-content:center; padding:40px; backdrop-filter:blur(6px);
+  }
+  .lightbox.open{ display:flex; }
+  .lightbox img{ max-width:min(90vw,700px); max-height:85vh; border-radius:10px; box-shadow:0 30px 80px rgba(0,0,0,0.6); }
+  .lightbox-close{
+    position:absolute; top:24px; right:28px; width:40px; height:40px; border-radius:50%;
+    background:var(--card); border:1px solid var(--border); color:var(--text); font-size:20px;
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .lightbox-close:hover{ border-color:var(--teal); color:var(--teal); }
+
+  .journey-text{ flex:1; min-width:0; }
+  .journey-num{
+    font-family:var(--font-mono); font-size:13px; color:var(--gold); letter-spacing:0.1em;
+    text-transform:uppercase; margin-bottom:10px; display:block;
+  }
+  .journey-title{ font-family:var(--font-display); font-size:24px; font-weight:600; margin-bottom:8px; }
+  .journey-loc{ font-family:var(--font-mono); font-size:12.5px; color:var(--teal); margin-bottom:16px; }
+  .journey-desc{ color:var(--text-muted); font-size:15px; max-width:520px; }
+  .journey-desc + .journey-desc{ margin-top:10px; }
+  .journey-link{ font-family:var(--font-mono); font-size:12.5px; color:var(--teal); margin-top:14px; display:inline-block; }
+  .journey-link:hover{ text-decoration:underline; }
+
+  #log{ position:relative; z-index:1; border-top:1px solid var(--border); }
+  .log-list{ display:flex; flex-direction:column; }
+  .log-entry{ display:grid; grid-template-columns:110px 1fr; gap:24px; padding:22px 0; border-bottom:1px solid var(--border); }
+  .log-entry:first-child{ padding-top:0; }
+  .log-entry:last-child{ border-bottom:none; }
+  @media(max-width:600px){ .log-entry{ grid-template-columns:1fr; gap:6px; } }
+  .log-date{ font-family:var(--font-mono); font-size:12.5px; color:var(--gold); white-space:nowrap; padding-top:2px; }
+  .log-title{ font-family:var(--font-display); font-size:16px; font-weight:600; margin-bottom:6px; }
+  .log-desc{ color:var(--text-muted); font-size:14.5px; }
+  .log-link{ font-family:var(--font-mono); font-size:12px; color:var(--teal); margin-top:8px; display:inline-block; }
+  .log-link:hover{ text-decoration:underline; }
+  .log-empty{ color:var(--text-faint); font-size:14px; font-style:italic; }
 
   #skills{ position:relative; z-index:1; border-top:1px solid var(--border); }
   .skill-cat{ margin-bottom:30px; }
@@ -182,12 +258,16 @@
     <div class="logo">DS<span>.</span></div>
     <div class="nav-links">
       <a href="#research">Research</a>
-      <a href="#education">Education</a>
-      <a href="#experience">Experience</a>
+      <a href="#journey">Journey</a>
+      <a href="#log">Log</a>
       <a href="#skills">Skills</a>
       <a href="#creds">Credentials</a>
       <a href="#contact">Contact</a>
     </div>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light and dark mode">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+    </button>
   </nav>
 </header>
 
@@ -196,7 +276,7 @@
     <div class="eyebrow">Prospective PhD · Applying Fall 2027 · India</div>
     <h1>Can autonomous AI agents collaboratively manage payment decisions while balancing <span class="hl">fraud risk, compliance and profitability?</span></h1>
     <div class="role-line">Deeksha Singh — <b>Prospective PhD Researcher</b> · AI-Driven Decision Intelligence in Financial Systems</div>
-    <p class="summary">My work explores whether multi-agent systems can coordinate competing payment objectives — fraud risk, authorization, customer outcomes, compliance and profitability — while remaining trustworthy, auditable and robust against emergent failures, bridging LLM-based agent orchestration, reinforcement learning and real-time financial decisioning.</p>
+    <p class="summary">Payment systems already run on automated pipelines — fraud engines veto in real time, authorization models score risk, compliance rules gate every transaction — each optimizing its own objective, none aware of the others. My research asks what changes when these become <em>coordinating agents</em> instead of isolated pipelines: can a multi-agent architecture negotiate fraud risk, authorization, customer experience, compliance and profitability as one joint decision, and still stay auditable enough for a regulator to trust it? The work sits at the intersection of LLM-based agent orchestration, reinforcement learning, and real-time financial decisioning — grounded in eleven years of watching these systems fail to talk to each other in production.</p>
     <div class="cta-row">
       <a class="btn btn-primary" href="https://www.linkedin.com/in/deeksha-singh-pmp%C2%AE-65361aa5/" target="_blank" rel="noopener">Connect on LinkedIn ↗</a>
       <a class="btn btn-ghost" href="https://github.com/Deeksha11-alt/Deeksha-Portfolio" target="_blank" rel="noopener">GitHub ↗</a>
@@ -209,7 +289,7 @@
     <div class="kpi-grid">
       <div class="kpi">
         <div class="kpi-label">Payments Experience</div>
-        <div class="kpi-value">11<span class="unit">+ yrs</span></div>
+        <div class="kpi-value"><span data-count="11">0</span><span class="unit">+ yrs</span></div>
         <div class="spark"><i style="height:30%"></i><i style="height:45%"></i><i style="height:60%"></i><i style="height:75%"></i><i style="height:90%"></i><i style="height:100%"></i></div>
       </div>
       <div class="kpi">
@@ -224,17 +304,17 @@
       </div>
       <div class="kpi">
         <div class="kpi-label">Objectives Studied</div>
-        <div class="kpi-value">5</div>
+        <div class="kpi-value"><span data-count="5">0</span></div>
         <div class="spark"><i style="height:90%"></i><i style="height:75%"></i><i style="height:60%"></i><i style="height:50%"></i><i style="height:35%"></i><i style="height:25%"></i></div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="research">
+<section id="research" class="reveal">
   <div class="wrap">
     <div class="sec-head"><span class="sec-num">01</span><span class="sec-title">Research <span class="hl">Interest</span></span><span class="sec-line"></span></div>
-    <p>Can autonomous AI agents collaboratively manage payment decisions while balancing fraud risk, authorization, customer outcomes, compliance and profitability? My work explores whether multi-agent systems can coordinate these competing objectives while remaining trustworthy, auditable and robust against emergent failures — bridging LLM-based agent orchestration, reinforcement learning, and real-time financial decisioning.</p>
+    <p>Can autonomous AI agents collaboratively manage payment decisions while balancing fraud risk, authorization, customer outcomes, compliance and profitability? My work explores whether multi-agent systems can coordinate these competing objectives while remaining trustworthy, auditable and robust against emergent failures — bridging LLM-based agent orchestration, reinforcement learning, and real-time financial decisioning. The bet: these five objectives don't have to be traded off in sequence by five separate systems — they can be negotiated jointly, by design.</p>
     <div class="interest-tags">
       <span class="interest-tag">Fraud Risk</span>
       <span class="interest-tag">Authorization Decisioning</span>
@@ -246,76 +326,147 @@
   </div>
 </section>
 
-<section id="education">
+<section id="journey" class="reveal">
   <div class="wrap">
-    <div class="sec-head"><span class="sec-num">02</span><span class="sec-title"><span class="hl">Education</span></span><span class="sec-line"></span></div>
-    <div class="edu-grid">
-      <div class="edu-item">
-        <div class="edu-degree">PhD, Business Analytics / AI in Financial Systems</div>
-        <div class="edu-school">Prospective — Applying for Fall 2027</div>
-        <div class="edu-meta">Target research area: multi-agent AI systems for payment and financial decision-making</div>
-        <span class="edu-tag">Prospective</span>
+    <div class="sec-head"><span class="sec-num">02</span><span class="sec-title">The <span class="hl">Journey</span></span><span class="sec-line"></span></div>
+    <p class="journey-lead">Eleven years inside payments, mechanical engineering roots, and an independent research thread that now converges on one question: how do you get autonomous agents to make trustworthy financial decisions together, instead of five systems arguing past each other.</p>
+
+    <div class="journey-stop">
+      <div class="journey-visual">
+        <div class="journey-visual-card" data-tilt>
+          <svg class="illo" viewBox="0 0 200 200" fill="none">
+            <defs>
+              <linearGradient id="gradEdu" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="var(--teal)"/><stop offset="1" stop-color="var(--gold)"/>
+              </linearGradient>
+            </defs>
+            <g opacity="0.18" stroke="var(--teal)" stroke-width="1">
+              <line x1="20" y1="40" x2="180" y2="40"/><line x1="20" y1="70" x2="180" y2="70"/>
+              <line x1="20" y1="100" x2="180" y2="100"/><line x1="20" y1="130" x2="180" y2="130"/>
+              <line x1="20" y1="160" x2="180" y2="160"/>
+            </g>
+            <circle cx="100" cy="88" r="52" stroke="url(#gradEdu)" stroke-width="1.4" opacity="0.5"/>
+            <path d="M100 68 L150 88 L100 108 L50 88 Z" stroke="var(--teal)" stroke-width="2.2" stroke-linejoin="round" fill="var(--card)"/>
+            <path d="M75 96 L75 118 Q100 130 125 118 L125 96" stroke="var(--teal)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+            <line x1="150" y1="88" x2="150" y2="112" stroke="var(--gold)" stroke-width="2.2" stroke-linecap="round"/>
+            <circle cx="150" cy="116" r="3.5" fill="var(--gold)"/>
+            <g stroke="var(--text-faint)" stroke-width="1.4" opacity="0.7">
+              <circle cx="46" cy="150" r="9"/><path d="M40 150 h12 M46 144 v12"/>
+            </g>
+          </svg>
+          <div class="journey-visual-stat">8.1<span style="font-size:13px;color:var(--text-faint)">/10 GPA</span></div>
+          <div class="journey-visual-label">Rank 2 of 70</div>
+        </div>
       </div>
-      <div class="edu-item">
-        <div class="edu-degree">Bachelor of Technology, Mechanical Engineering</div>
-        <div class="edu-school">Barkatullah University, India</div>
-        <div class="edu-meta">GPA 8.1 / 10 — Class Rank 2 / 70</div>
+      <div class="journey-text">
+        <span class="journey-num">Stop 01 — 2015</span>
+        <div class="journey-title">Mechanical Engineering, First Principles</div>
+        <div class="journey-loc">📍 Bhopal, India</div>
+        <p class="journey-desc">Before dashboards, it was thermodynamics and stress analysis. Barkatullah University trained the instinct this research still runs on: decompose a complex system until every part can be tested on its own.</p>
       </div>
     </div>
+
+    <div class="journey-stop rev">
+      <div class="journey-visual">
+        <div class="journey-photo-wrap">
+          <img class="journey-photo" src="tcs-badge.jpg" alt="Deeksha's TCS employee badge" data-lightbox>
+        </div>
+      </div>
+      <div class="journey-text">
+        <span class="journey-num">Stop 02 — 2015 – 2022</span>
+        <div class="journey-title">Business Analyst, Tata Consultancy Services</div>
+        <div class="journey-loc">📍 Mumbai, India</div>
+        <p class="journey-desc">Seven years turning ambiguous stakeholder asks into dimensional models and reporting systems built to survive an audit, not just a demo — the first real lesson in how financial systems actually get judged.</p>
+      </div>
+    </div>
+
+    <div class="journey-stop">
+      <div class="journey-visual">
+        <div class="journey-photo-wrap">
+          <img class="journey-photo" src="global-payments.jpg" alt="Deeksha in London, working with Global Payments" data-lightbox>
+        </div>
+      </div>
+      <div class="journey-text">
+        <span class="journey-num">Stop 03 — 2022 – Present</span>
+        <div class="journey-title">Payment Intelligence Strategist, Global Payments</div>
+        <div class="journey-loc">📍 London, UK</div>
+        <p class="journey-desc">Five years inside the machinery that actually makes these calls — fraud risk, authorization, and decision intelligence workstreams at Global Payments — is where the research question stopped being hypothetical.</p>
+      </div>
+    </div>
+
+    <div class="journey-stop rev">
+      <div class="journey-visual">
+        <div class="journey-visual-card" data-tilt>
+          <svg class="illo" viewBox="0 0 200 200" fill="none">
+            <g opacity="0.15" stroke="var(--teal)" stroke-width="1">
+              <line x1="20" y1="40" x2="180" y2="40"/><line x1="20" y1="70" x2="180" y2="70"/>
+              <line x1="20" y1="100" x2="180" y2="100"/><line x1="20" y1="130" x2="180" y2="130"/>
+              <line x1="20" y1="160" x2="180" y2="160"/>
+            </g>
+            <g stroke="var(--text-faint)" stroke-width="1.4" opacity="0.8">
+              <line x1="100" y1="95" x2="55" y2="60"/>
+              <line x1="100" y1="95" x2="150" y2="55"/>
+              <line x1="100" y1="95" x2="60" y2="140"/>
+              <line x1="100" y1="95" x2="145" y2="135"/>
+            </g>
+            <circle cx="100" cy="95" r="13" fill="var(--gold)" class="pulse-node"/>
+            <circle cx="55" cy="60" r="7" fill="var(--card)" stroke="var(--teal)" stroke-width="2"/>
+            <circle cx="150" cy="55" r="7" fill="var(--card)" stroke="var(--teal)" stroke-width="2"/>
+            <circle cx="60" cy="140" r="7" fill="var(--card)" stroke="var(--teal)" stroke-width="2"/>
+            <circle cx="145" cy="135" r="7" fill="var(--card)" stroke="var(--teal)" stroke-width="2"/>
+          </svg>
+          <div class="journey-visual-stat">2025</div>
+          <div class="journey-visual-label">Research Began</div>
+        </div>
+      </div>
+      <div class="journey-text">
+        <span class="journey-num">Stop 04 — 2025 – Present</span>
+        <div class="journey-title">AI-Driven Decision Intelligence Research</div>
+        <div class="journey-loc">📍 Independent</div>
+        <p class="journey-desc">Investigating multi-agent systems, reinforcement learning, and uncertainty-aware decision-making for coordinated payments — built and versioned in the open, not left as a private side project.</p>
+        <a class="journey-link" href="https://github.com/Deeksha11-alt/AI-Decision-Intelligence-Research" target="_blank" rel="noopener">github.com/Deeksha11-alt/AI-Decision-Intelligence-Research ↗</a>
+      </div>
+    </div>
+
+    <div class="journey-stop">
+      <div class="journey-visual">
+        <div class="journey-visual-card" data-tilt>
+          <svg class="illo" viewBox="0 0 200 200" fill="none">
+            <g opacity="0.15" stroke="var(--teal)" stroke-width="1">
+              <line x1="20" y1="40" x2="180" y2="40"/><line x1="20" y1="70" x2="180" y2="70"/>
+              <line x1="20" y1="100" x2="180" y2="100"/><line x1="20" y1="130" x2="180" y2="130"/>
+              <line x1="20" y1="160" x2="180" y2="160"/>
+            </g>
+            <path d="M30 155 C 70 155, 70 105, 100 95 S 150 60, 165 42" stroke="var(--teal)" stroke-width="2.2" stroke-dasharray="1 9" stroke-linecap="round"/>
+            <circle cx="30" cy="155" r="5" fill="var(--text-faint)"/>
+            <path d="M165 42 L165 20 M165 20 L182 27 L165 34 Z" stroke="var(--gold)" stroke-width="2.2" fill="var(--gold)" stroke-linejoin="round"/>
+            <circle cx="165" cy="42" r="6" fill="var(--card)" stroke="var(--gold)" stroke-width="2.2" class="pulse-node"/>
+          </svg>
+          <div class="journey-visual-stat">Fall 2027</div>
+          <div class="journey-visual-label">Target Enrollment</div>
+        </div>
+      </div>
+      <div class="journey-text">
+        <span class="journey-num">Stop 05 — What's Next</span>
+        <div class="journey-title">PhD, Business Analytics / AI in Financial Systems</div>
+        <div class="journey-loc">📍 United States (Prospective)</div>
+        <p class="journey-desc">Applying Fall 2027 to take this from independent inquiry to a full-time research program — multi-agent AI systems for payment and financial decision-making.</p>
+      </div>
+    </div>
+
   </div>
 </section>
 
-<section id="experience">
+<section id="log" class="reveal">
   <div class="wrap">
-    <div class="sec-head"><span class="sec-num">03</span><span class="sec-title">Professional <span class="hl">Experience</span></span><span class="sec-line"></span></div>
-    <div class="timeline">
-
-      <div class="job">
-        <div class="job-head">
-          <div class="job-role">Payment Intelligence Strategist</div>
-          <div class="job-dates">2022 — PRESENT</div>
-        </div>
-        <div class="job-org">Global Payments</div>
-        <ul>
-          <li>11+ years of experience in payments strategy, spanning fraud risk, authorization and decision intelligence workstreams.</li>
-        </ul>
-      </div>
-
-      <div class="job">
-        <div class="job-head">
-          <div class="job-role">Business Analyst</div>
-          <div class="job-dates">2015 — 2022</div>
-        </div>
-        <div class="job-org">Tata Consultancy Services (TCS)</div>
-      </div>
-
-    </div>
+    <div class="sec-head"><span class="sec-num">03</span><span class="sec-title">Research <span class="hl">Log</span></span><span class="sec-line"></span></div>
+    <div class="log-list" id="log-list"></div>
   </div>
 </section>
 
-<section id="independent-research">
+<section id="skills" class="reveal">
   <div class="wrap">
-    <div class="sec-head"><span class="sec-num">04</span><span class="sec-title">Independent <span class="hl">Research</span></span><span class="sec-line"></span></div>
-    <div class="timeline">
-      <div class="job">
-        <div class="job-head">
-          <div class="job-role">AI-Driven Decision Intelligence Research</div>
-          <div class="job-dates">2025 — PRESENT</div>
-        </div>
-        <div class="job-org">Independent</div>
-        <ul>
-          <li>Investigating multi-agent systems, reinforcement learning, and uncertainty-aware intelligent systems for coordinated payment decision-making.</li>
-          <li>Building a public research portfolio and codebase exploring collaborative AI agents balancing fraud risk, compliance, and profitability objectives.</li>
-        </ul>
-        <a class="job-link" href="https://github.com/Deeksha11-alt/AI-Decision-Intelligence-Research" target="_blank" rel="noopener">github.com/Deeksha11-alt/AI-Decision-Intelligence-Research ↗</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="skills">
-  <div class="wrap">
-    <div class="sec-head"><span class="sec-num">05</span><span class="sec-title">Technical <span class="hl">Skills</span></span><span class="sec-line"></span></div>
+    <div class="sec-head"><span class="sec-num">04</span><span class="sec-title">Technical <span class="hl">Skills</span></span><span class="sec-line"></span></div>
 
     <div class="skill-cat">
       <div class="skill-cat-name">Languages &amp; Tools</div>
@@ -341,9 +492,9 @@
   </div>
 </section>
 
-<section id="creds">
+<section id="creds" class="reveal">
   <div class="wrap">
-    <div class="sec-head"><span class="sec-num">06</span><span class="sec-title">Certifications &amp; <span class="hl">Additional</span></span><span class="sec-line"></span></div>
+    <div class="sec-head"><span class="sec-num">05</span><span class="sec-title">Certifications &amp; <span class="hl">Additional</span></span><span class="sec-line"></span></div>
     <ul class="cred-list">
       <li>PMP® — Project Management Professional</li>
       <li>SAFe® 6 Product Owner / Product Manager</li>
@@ -354,7 +505,7 @@
   </div>
 </section>
 
-<section id="contact">
+<section id="contact" class="reveal">
   <div class="wrap">
     <h2>Let's talk <span class="hl">research.</span></h2>
     <p>Open to conversations with faculty and labs working on multi-agent AI, financial decisioning, or trustworthy autonomous systems.</p>
@@ -365,7 +516,155 @@
   </div>
 </section>
 
-<footer>© 2026 Deeksha Singh — Researching trustworthy autonomous decision-making in payments.</footer>
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-close" id="lightbox-close">✕</div>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<footer>© 2026 Deeksha Singh — Researching trustworthy autonomous decision-making in payments. <span id="updated-label"></span></footer>
+
+<script>
+/* ============================================================
+   RESEARCH LOG — edit this array to add updates.
+   Newest entry goes at the TOP. Just copy a block, change the
+   fields, and commit — nothing else on the page needs to change.
+   'link' is optional — delete that line if there isn't one.
+   ============================================================ */
+const researchLog = [
+  {
+    date: "Aug 2026",
+    title: "Portfolio site launched",
+    desc: "Published this site to track research interests, independent work, and PhD application progress toward Fall 2027.",
+  },
+  {
+    date: "2025",
+    title: "Began independent research",
+    desc: "Started investigating multi-agent systems and reinforcement learning for coordinated payment decision-making, alongside full-time work in payments strategy.",
+    link: "https://github.com/Deeksha11-alt/AI-Decision-Intelligence-Research"
+  },
+];
+/* ============================================================ */
+
+const LAST_UPDATED = "August 2026"; // update this line whenever you edit the page
+document.getElementById('updated-label').textContent = `— last updated ${LAST_UPDATED}`;
+
+const logList = document.getElementById('log-list');
+if (researchLog.length === 0) {
+  logList.innerHTML = '<p class="log-empty">No entries yet — check back soon.</p>';
+} else {
+  logList.innerHTML = researchLog.map(entry => `
+    <div class="log-entry">
+      <div class="log-date">${entry.date}</div>
+      <div>
+        <div class="log-title">${entry.title}</div>
+        <div class="log-desc">${entry.desc}</div>
+        ${entry.link ? `<a class="log-link" href="${entry.link}" target="_blank" rel="noopener">${entry.link.replace('https://','')} ↗</a>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+/* light/dark theme toggle */
+const root = document.documentElement;
+const themeBtn = document.getElementById('theme-toggle');
+const savedTheme = localStorage.getItem('theme');
+const systemPrefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+if (savedTheme === 'light' || (!savedTheme && systemPrefersLight)) {
+  root.setAttribute('data-theme', 'light');
+}
+themeBtn.addEventListener('click', () => {
+  const isLight = root.getAttribute('data-theme') === 'light';
+  if (isLight) {
+    root.removeAttribute('data-theme');
+    localStorage.setItem('theme', 'dark');
+  } else {
+    root.setAttribute('data-theme', 'light');
+    localStorage.setItem('theme', 'light');
+  }
+});
+
+/* animated count-up for KPI numbers */
+const countEls = document.querySelectorAll('[data-count]');
+const countObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const el = entry.target;
+    const target = parseInt(el.getAttribute('data-count'), 10);
+    const duration = 900;
+    const start = performance.now();
+    function tick(now){
+      const p = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(eased * target);
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+    countObserver.unobserve(el);
+  });
+}, { threshold: 0.6 });
+countEls.forEach(el => countObserver.observe(el));
+
+/* mouse tilt on journey visuals */
+const tiltEls = document.querySelectorAll('.journey-visual-card, .journey-photo-wrap');
+tiltEls.forEach(el => {
+  el.addEventListener('mousemove', (e) => {
+    const rect = el.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    const card = el.classList.contains('journey-visual-card') ? el : el.querySelector('.journey-photo');
+    if (!card) return;
+    const baseRotate = el.closest('.journey-stop.rev') ? 3 : -3;
+    card.style.transform = `perspective(700px) rotateX(${(-y*10).toFixed(2)}deg) rotateY(${(x*14 + baseRotate*0.4).toFixed(2)}deg) scale(1.035)`;
+  });
+  el.addEventListener('mouseleave', () => {
+    const card = el.classList.contains('journey-visual-card') ? el : el.querySelector('.journey-photo');
+    if (card) card.style.transform = '';
+  });
+});
+
+/* lightbox for real photos */
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+document.querySelectorAll('img[data-lightbox]').forEach(img => {
+  img.addEventListener('click', () => {
+    lightboxImg.src = img.src;
+    lightboxImg.alt = img.alt;
+    lightbox.classList.add('open');
+  });
+});
+function closeLightbox(){ lightbox.classList.remove('open'); lightboxImg.src=''; }
+document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+
+/* scroll reveal */
+const revealEls = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in-view');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+revealEls.forEach(el => revealObserver.observe(el));
+
+/* nav active-link highlighting */
+const navLinks = document.querySelectorAll('.nav-links a');
+const sections = Array.from(navLinks).map(link => document.querySelector(link.getAttribute('href')));
+const navObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    const id = '#' + entry.target.id;
+    const link = document.querySelector(`.nav-links a[href="${id}"]`);
+    if (!link) return;
+    if (entry.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-40% 0px -50% 0px' });
+sections.forEach(sec => sec && navObserver.observe(sec));
+</script>
 
 </body>
 </html>
